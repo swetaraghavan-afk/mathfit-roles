@@ -515,14 +515,74 @@ table.apps .watch{color:var(--text-brand);text-decoration:none;}
   </div>
 </section>
 
-<section class="apply">
-  <div class="wrap">
-    <div class="section-head" style="margin-left:auto;margin-right:auto;">
+<section class="apply" id="apply">
+  <div class="wrap" style="text-align:left;">
+    <div class="section-head">
+      <span class="type-label-sm type-caps overline">Apply</span>
       <h2 class="type-display-sm-fluid">Ready to lead the programme?</h2>
-      <p class="lead-para type-body-lg" style="margin-top:var(--space-12);margin-left:auto;margin-right:auto;">Send your CV, which role you are applying for, and one example of a team outcome you improved with data, to Sweta Raghavan.</p>
+      <p class="lead-para type-body-lg" style="margin-top:var(--space-12);">Fill in the form below. It takes about ten minutes.</p>
     </div>
-    <a class="btn-cta" href="mailto:sweta.raghavan@cuemath.com?subject=Application: Lead, MathFit Academy">Apply now <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <form id="appForm" class="form-group" novalidate>
+      <div class="form-block">
+        <div class="block-head"><span class="overline type-label-sm type-caps">About you</span></div>
+        <div class="field"><label class="type-label-md" for="name">Full name <span class="req">*</span></label><input type="text" id="name" name="Name" required></div>
+        <div class="field"><label class="type-label-md" for="email">Email <span class="req">*</span></label><input type="email" id="email" name="Email" required></div>
+        <div class="field"><label class="type-label-md" for="phone">Phone (WhatsApp) <span class="req">*</span></label><input type="tel" id="phone" name="Phone" required></div>
+        <div class="field"><label class="type-label-md" for="years">Number of years with Cuemath <span class="req">*</span></label><input type="text" id="years" name="Years with Cuemath" required placeholder="e.g. 2.5"></div>
+        <div class="field"><label class="type-label-md" for="grade">Grade cohort expertise <span class="req">*</span></label><select id="grade" name="Grade cohort expertise" required><option value="">Select</option><option value="K-5">K-5</option><option value="3-8">3-8</option><option value="9-12">9-12</option><option value="All grades">All grades</option></select></div>
+      </div>
+      <div class="form-block">
+        <div class="block-head"><span class="overline type-label-sm type-caps">Your application</span></div>
+        <div class="field"><label class="type-label-md" for="qual">Your qualifications <span class="req">*</span></label><span class="hint type-body-md">Education, certifications and relevant experience.</span><textarea id="qual" name="Qualifications" required></textarea></div>
+        <div class="field"><label class="type-label-md" for="strengths">Your strengths <span class="req">*</span></label><textarea id="strengths" name="Strengths" required></textarea></div>
+        <div class="field"><label class="type-label-md" for="why">Why do you want this role? <span class="req">*</span></label><textarea id="why" name="Why this role" required></textarea></div>
+      </div>
+      <div class="form-block">
+        <div class="block-head"><span class="overline type-label-sm type-caps">Availability</span><p class="block-sub type-body-md">This is a full-time, in-office role.</p></div>
+        <div class="field"><label class="type-label-md">Are you willing to work full-time? <span class="req">*</span></label>
+          <div class="choice-group">
+            <label class="choice"><input type="radio" name="Full-time" value="Yes" required><span class="type-body-lg">Yes</span></label>
+            <label class="choice"><input type="radio" name="Full-time" value="No"><span class="type-body-lg">No</span></label>
+          </div></div>
+        <div class="field"><label class="type-label-md">Can you work from our office in Gurugram or Bengaluru? <span class="req">*</span></label>
+          <div class="choice-group">
+            <label class="choice"><input type="radio" name="Office" value="Yes, Gurugram" required><span class="type-body-lg">Yes, Gurugram</span></label><label class="choice"><input type="radio" name="Office" value="Yes, Bengaluru" required><span class="type-body-lg">Yes, Bengaluru</span></label>
+            <label class="choice"><input type="radio" name="Office" value="No, neither" required><span class="type-body-lg">No, neither</span></label>
+          </div></div>
+      </div>
+      <div class="error-banner" id="errBox" style="display:none;"></div>
+      <div class="submit-row">
+        <button type="submit" class="btn-cta">Send my application <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <p class="hint type-body-md">This opens your email app with your answers filled in, addressed to Sweta Raghavan. Attach your CV before you send.</p>
+      </div>
+    </form>
   </div>
 </section>
+
+<script>
+document.getElementById('appForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var f=e.target, miss=[], lines=[];
+  f.querySelectorAll('input,textarea').forEach(function(el){
+    if(el.type==='radio'){ return; }
+    if(el.required && !el.value.trim()) miss.push(el.name);
+    else if(el.value.trim()) lines.push(el.name+': '+el.value.trim());
+  });
+  ['Full-time','Office'].concat([]).forEach(function(g){
+    var c=f.querySelector('input[name="'+g+'"]:checked');
+    if(!c) miss.push(g); else lines.push(g+': '+c.value);
+  });
+  var box=document.getElementById('errBox');
+  if(miss.length){ box.style.display='block'; box.innerHTML='<strong>Please complete:</strong> '+miss.join(', '); box.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  box.style.display='none';
+  var subject="Application: Lead, MathFit Academy"+' — '+f.name.value.trim();
+  var body=lines.join('
+
+')+'
+
+(CV attached)';
+  window.location.href='mailto:sweta.raghavan@cuemath.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+});
+</script>
 
 </body></html>
