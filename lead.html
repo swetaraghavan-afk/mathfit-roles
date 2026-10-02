@@ -576,11 +576,7 @@ document.getElementById('appForm').addEventListener('submit',function(e){
   if(miss.length){ box.style.display='block'; box.innerHTML='<strong>Please complete:</strong> '+miss.join(', '); box.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   box.style.display='none';
   var subject="Application: Lead, MathFit Academy"+' — '+f.name.value.trim();
-  var body=lines.join('
-
-')+'
-
-(CV attached)';
+  var body=lines.join('\n\n')+'\n\n(CV attached)';
   window.location.href='mailto:sweta.raghavan@cuemath.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
 });
 </script>
